@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e41b3383cf3745a092c2f79d6958e441, type: 3}
+  m_Name: ExperienceObjectPooling
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.Pool.PooledGameObjectParamSO
+  <UniquePoolTag>k__BackingField: {fileID: 11400000, guid: f4278bad0bf30d84dafb1c0c4489ae78, type: 2}
+  prefab: {fileID: 4734041439895464731, guid: d1e943cce45cb3f4facdeef8355c299e, type: 3}
+  shouldGroupObject: 1
+  defaultSize: 10
+  maxSize: 50

@@ -1,0 +1,9 @@
+{
+  "tags": [
+    { "tag": "Element.Normal", "description": "Current amount of health points." },
+    { "tag": "Element.Fire", "description": "Current amount of health points." },
+    { "tag": "Element.Water", "description": "Current amount of health points." },
+    { "tag": "Element.Ice", "description": "Current amount of health points." },
+    { "tag": "Element.Void", "description": "Current amount of health points." }
+  ]
+}

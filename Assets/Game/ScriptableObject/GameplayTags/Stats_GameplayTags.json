@@ -1,0 +1,18 @@
+{
+  "tags": [
+    { "tag": "Stat.Health", "description": "Current amount of health points." },
+    { "tag": "Stat.MaxHealth", "description": "Maximum amount of health points." },
+
+    { "tag": "Stat.Mana", "description": "Current amount of mana or energy points." },
+    { "tag": "Stat.MaxMana", "description": "Maximum amount of mana or energy points." },
+
+    { "tag": "Stat.Shield", "description": "Current amount of shield points that absorb damage." },
+    { "tag": "Stat.MaxShield", "description": "Maximum amount of shield points that can be held." },
+
+    { "tag": "Stat.Speed", "description": "Current movement speed value." },
+    { "tag": "Stat.MaxSpeed", "description": "Maximum movement speed value." },
+
+    { "tag": "Stat.Experience", "description": "Current amount of experience points." },
+    { "tag": "Stat.MaxExperience", "description": "Maximum amount of experience points." }
+  ]
+}

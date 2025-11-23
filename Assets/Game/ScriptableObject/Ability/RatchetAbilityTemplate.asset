@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb1b0c170e3b4db4825a9ac5b5fbf7fe, type: 3}
+  m_Name: RatchetAbilityTemplate
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Runtime.Ability.RatchetAbilityTemplate
+  <AbilityType>k__BackingField: 3
+  <DefaultRate>k__BackingField: 0.8
+  abilityTag: {fileID: 0}
+  <ShowAbilityLog>k__BackingField: 0
+  ProjectilePrefab: {fileID: 3300129471974663874, guid: e5a6eddd84600df499d4140445c871f7, type: 3}
+  NumberOfProjectiles: 3

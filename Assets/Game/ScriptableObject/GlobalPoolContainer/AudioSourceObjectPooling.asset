@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e41b3383cf3745a092c2f79d6958e441, type: 3}
+  m_Name: AudioSourceObjectPooling
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.Pool.PooledGameObjectParamSO
+  <UniquePoolTag>k__BackingField: {fileID: 11400000, guid: 063154453107cd94f849442bcc22a43c, type: 2}
+  prefab: {fileID: 7443659881050568231, guid: 44d63320a6e08cd4dac34e423b2a8d98, type: 3}
+  shouldGroupObject: 1
+  defaultSize: 10
+  maxSize: 25

@@ -1,0 +1,10 @@
+{
+  "tags": [
+    { "tag": "Feedback.Jump.Default", "description": "Current amount of health points." },
+    { "tag": "Feedback.Damage.Default", "description": "Current amount of health points." },
+    { "tag": "Feedback.Shoot.Default", "description": "Current amount of health points." },
+    { "tag": "Feedback.Move.Default", "description": "Current amount of health points." },
+    { "tag": "Feedback.Equip.Weapon", "description": "Current amount of health points." },
+    { "tag": "Feedback.Equip.Equipement", "description": "Current amount of health points." }
+  ]
+}

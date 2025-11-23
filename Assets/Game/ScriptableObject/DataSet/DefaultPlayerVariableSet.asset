@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22bef97b2e641e38e8b0a2f3f1aab2b, type: 3}
+  m_Name: DefaultPlayerVariableSet
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.GAS.VariableSet.GameplayVariableSet
+  FloatVariables:
+  - <VariableTag>k__BackingField: {fileID: 11400000, guid: e920de55d20b95340bc78b1eeeedd1a6, type: 2}
+    <VariableValue>k__BackingField: 100
+  - <VariableTag>k__BackingField: {fileID: 11400000, guid: 3b09e708ff6592144a3dfc7ff85c3910, type: 2}
+    <VariableValue>k__BackingField: 100
+  - <VariableTag>k__BackingField: {fileID: 11400000, guid: cbaa4c464827bb143a2b975f0268689f, type: 2}
+    <VariableValue>k__BackingField: 0
+  - <VariableTag>k__BackingField: {fileID: 11400000, guid: a3919e4e0be54a44fba8d716f2c62503, type: 2}
+    <VariableValue>k__BackingField: 150
+  - <VariableTag>k__BackingField: {fileID: 11400000, guid: f68be971b43b9814081b8cfb761712fc, type: 2}
+    <VariableValue>k__BackingField: 10
+  - <VariableTag>k__BackingField: {fileID: 11400000, guid: a4c64a545cb897747b66ee3556a3462e, type: 2}
+    <VariableValue>k__BackingField: 20
+  - <VariableTag>k__BackingField: {fileID: 11400000, guid: 882c51f45c0ec244b82c0816c4c5d24d, type: 2}
+    <VariableValue>k__BackingField: 100
+  - <VariableTag>k__BackingField: {fileID: 11400000, guid: 5813a643e918ff448a83d47a744bdf96, type: 2}
+    <VariableValue>k__BackingField: 100

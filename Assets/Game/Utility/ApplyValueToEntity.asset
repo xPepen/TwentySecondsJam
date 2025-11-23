@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e51ac839a6be4777bb1202e3fe9ca643, type: 3}
+  m_Name: ApplyValueToEntity
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Runtime.Utility.ApplyValueToEntity
+  ValueAmount: 10
+  PlayerIndex: 0
+  PropertyToApplyValue: {fileID: 11400000, guid: e920de55d20b95340bc78b1eeeedd1a6, type: 2}
+  HowToApplyValue: 1

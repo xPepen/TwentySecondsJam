@@ -1,0 +1,20 @@
+{
+    "name": "GameplayTags.Editor",
+    "rootNamespace": "GameplayTags.Editor",
+    "references": [
+        "GUID:6f3c203c17383d14da5dd54a584e08b2"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_EDITOR "
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

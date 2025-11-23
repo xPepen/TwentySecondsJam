@@ -1,0 +1,10 @@
+{
+  "tags": [
+    { "tag": "Action.Jump", "description": "Current amount of health points." },
+    { "tag": "Action.Move", "description": "Current amount of health points." },
+    { "tag": "Action.Shoot", "description": "Current amount of health points." },
+    { "tag": "Action.Die", "description": "Current amount of health points." },
+    { "tag": "Action.Interact", "description": "Current amount of health points." },
+    { "tag": "Action.SpecialAttack", "description": "Current amount of health points." }
+  ]
+}

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 934b0f2efe814368a1e05825c26f0060, type: 3}
+  m_Name: FB_DefaultWeaponDamage
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.GAS.Feedback.FeedbackBaseTemplate
+  feedbackTag: {fileID: 11400000, guid: 0b800afef727a864f91b21dc45f5ed2b, type: 2}
+  audioSetting:
+    _sound:
+    - {fileID: 0}
+    - {fileID: 0}
+    _output: {fileID: 0}
+    _playOnAwake: 0
+    _loop: 0
+    _delay: 0
+    _volume: 1
+    _pitch: 1
+    _stereoPan: 0
+    _spatialBlend: 0
+    _reverbZoneMix: 0
+    _priority: 128
+    _mute: 0
+    _bypassEffects: 0
+    _bypassListenerEffects: 0
+    _bypassReverbZones: 0
+    _skipIfAlreadyPlaying: 0
+    audioPlaybackType: 0
+  particleSetting:
+    ParticlePrefab: {fileID: 2708598583397607911, guid: 6398d43fe79ea0140913dc5530c646af, type: 3}
+    SkipIfAlreadyPlaying: 0
