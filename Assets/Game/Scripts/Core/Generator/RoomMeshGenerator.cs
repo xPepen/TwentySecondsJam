@@ -1,139 +1,112 @@
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Game.Scripts.Core.Generator
 {
     public class RoomMeshGenerator
     {
-        private LevelGenConfig config;
-        private GameObject container;
+        private readonly LevelGenConfig _config;
+        private readonly GameObject _container;
 
         public RoomMeshGenerator(LevelGenConfig config)
         {
-            this.config = config;
-            this.container = new GameObject("Rooms");
+            this._config = config;
+            this._container = new GameObject("Rooms");
         }
 
         public void Generate(RoomGraph graph)
         {
             foreach (var room in graph.Rooms)
             {
-                CreateRoomMesh(room, graph.Neighbors[room]);
+                ProcessRoom(room, graph.Neighbors[room]);
             }
         }
 
-        private void CreateRoomMesh(Room room, List<Room> neighbors)
+        private void ProcessRoom(Room room, List<Room> neighbors)
         {
-            GameObject roomObj = new GameObject($"Room_{room.Rect.center}");
-            roomObj.transform.SetParent(container.transform);
+            Rect localRect = new Rect(
+                -room.Rect.width / 2f,
+                -room.Rect.height / 2f,
+                room.Rect.width,
+                room.Rect.height
+            );
 
-            MeshFilter mf = roomObj.AddComponent<MeshFilter>();
-            MeshRenderer mr = roomObj.AddComponent<MeshRenderer>();
-            MeshCollider mc = roomObj.AddComponent<MeshCollider>();
+            //Prepare Job Data
+            NativeList<float3> verts = new NativeList<float3>(Allocator.TempJob);
+            NativeList<float2> uvs = new NativeList<float2>(Allocator.TempJob);
+            NativeList<int> floorTris = new NativeList<int>(Allocator.TempJob);
+            NativeList<int> wallTris = new NativeList<int>(Allocator.TempJob);
 
-            mr.sharedMaterials = new Material[] { config.FloorMaterial, config.WallMaterial };
+            int4 neighborFlags = new int4(
+                HasNeighbor(room, neighbors, Vector2.up) ? 1 : 0,
+                HasNeighbor(room, neighbors, Vector2.down) ? 1 : 0,
+                HasNeighbor(room, neighbors, Vector2.right) ? 1 : 0,
+                HasNeighbor(room, neighbors, Vector2.left) ? 1 : 0
+            );
 
-            MeshData data = new MeshData();
-            AddFloor(data, room.Rect);
-            AddWalls(data, room, neighbors);
+            RoomGeometryJob job = new RoomGeometryJob
+            {
+                Rect = localRect,
+                WallHeight = _config.WallHeight,
+                DoorHeight = _config.DoorHeight,
+                DoorWidth = _config.DoorWidth,
+                NeighborFlags = neighborFlags,
+                Vertices = verts,
+                UVs = uvs,
+                FloorTriangles = floorTris,
+                WallTriangles = wallTris
+            };
 
+            //Schedule and Complete Job
+            JobHandle handle = job.Schedule();
+            handle.Complete();
+
+            // Create Unity Object (Main Thread)
+            GameObject roomObj = LevelObjectFactory.CreateRoomObject(
+                _config,
+                $"Room_{room.Rect.center}",
+                _container.transform
+            );
+
+            roomObj.transform.position = new Vector3(room.Rect.center.x, 0, room.Rect.center.y);
+            room.RoomObject = roomObj;
+
+            //Assign Mesh
             Mesh mesh = new Mesh();
-            mesh.vertices = data.Vertices.ToArray();
-            mesh.uv = data.UVs.ToArray();
+
+            mesh.SetVertices(verts.AsArray());
+            mesh.SetUVs(0, uvs.AsArray());
+
             mesh.subMeshCount = 2;
-            mesh.SetTriangles(data.FloorTriangles.ToArray(), 0);
-            mesh.SetTriangles(data.WallTriangles.ToArray(), 1);
-            
+
+            mesh.SetTriangles(floorTris.AsArray().ToArray(), 0);
+            mesh.SetTriangles(wallTris.AsArray().ToArray(), 1);
+
             mesh.RecalculateNormals();
-            
-            mf.mesh = mesh;
-            mc.sharedMesh = mesh;
-        }
+            mesh.RecalculateBounds();
 
-        private void AddFloor(MeshData data, Rect r)
-        {
-            Vector3 v0 = new Vector3(r.xMin, 0, r.yMin);
-            Vector3 v1 = new Vector3(r.xMax, 0, r.yMin);
-            Vector3 v2 = new Vector3(r.xMin, 0, r.yMax);
-            Vector3 v3 = new Vector3(r.xMax, 0, r.yMax);
+            roomObj.GetComponent<MeshFilter>().mesh = mesh;
+            roomObj.GetComponent<MeshCollider>().sharedMesh = mesh;
 
-            int idx = data.Vertices.Count;
-            data.Vertices.AddRange(new[] { v0, v1, v2, v3 });
-            data.UVs.AddRange(new[] { new Vector2(v0.x, v0.z), new Vector2(v1.x, v1.z), new Vector2(v2.x, v2.z), new Vector2(v3.x, v3.z) });
-            data.FloorTriangles.AddRange(new[] { idx, idx + 2, idx + 1, idx + 2, idx + 3, idx + 1 });
-        }
-
-        private void AddWalls(MeshData data, Room room, List<Room> neighbors)
-        {
-            Rect r = room.Rect;
-            // Check logical neighbors to decide if we need a hole
-            bool n = HasNeighbor(room, neighbors, Vector2.up);
-            bool s = HasNeighbor(room, neighbors, Vector2.down);
-            bool e = HasNeighbor(room, neighbors, Vector2.right);
-            bool w = HasNeighbor(room, neighbors, Vector2.left);
-
-            Vector3 bl = new Vector3(r.xMin, 0, r.yMin);
-            Vector3 br = new Vector3(r.xMax, 0, r.yMin);
-            Vector3 tl = new Vector3(r.xMin, 0, r.yMax);
-            Vector3 tr = new Vector3(r.xMax, 0, r.yMax);
-
-            BuildWall(data, tl, tr, n); // North
-            BuildWall(data, br, bl, s); // South
-            BuildWall(data, tr, br, e); // East
-            BuildWall(data, bl, tl, w); // West
-        }
-
-        private void BuildWall(MeshData data, Vector3 start, Vector3 end, bool hasDoor)
-        {
-            if (!hasDoor)
-            {
-                AddQuad(data, start, end);
-            }
-            else
-            {
-                Vector3 mid = (start + end) * 0.5f;
-                Vector3 dir = (end - start).normalized;
-                float halfDoor = config.DoorWidth * 0.5f;
-
-                AddQuad(data, start, mid - dir * halfDoor);
-                AddQuad(data, mid + dir * halfDoor, end);
-            }
-        }
-
-        private void AddQuad(MeshData data, Vector3 start, Vector3 end)
-        {
-            float h = config.WallHeight;
-            int idx = data.Vertices.Count;
-            
-            data.Vertices.Add(start);
-            data.Vertices.Add(end);
-            data.Vertices.Add(start + Vector3.up * h);
-            data.Vertices.Add(end + Vector3.up * h);
-
-            float len = Vector3.Distance(start, end);
-            data.UVs.Add(new Vector2(0, 0));
-            data.UVs.Add(new Vector2(len, 0));
-            data.UVs.Add(new Vector2(0, h));
-            data.UVs.Add(new Vector2(len, h));
-
-            data.WallTriangles.AddRange(new[] { idx, idx + 2, idx + 1, idx + 2, idx + 3, idx + 1 });
+            //Cleanup Native Arrays
+            verts.Dispose();
+            uvs.Dispose();
+            floorTris.Dispose();
+            wallTris.Dispose();
         }
 
         private bool HasNeighbor(Room r, List<Room> neighbors, Vector2 dir)
         {
             foreach (var n in neighbors)
             {
-                if (Vector2.Dot((n.Center - r.Center).normalized, dir) > 0.9f) return true;
+                Vector2 diff = (n.Center - r.Center).normalized;
+                if (Vector2.Dot(diff, dir) > 0.8f) return true;
             }
-            return false;
-        }
 
-        private class MeshData
-        {
-            public List<Vector3> Vertices = new();
-            public List<Vector2> UVs = new();
-            public List<int> FloorTriangles = new();
-            public List<int> WallTriangles = new();
+            return false;
         }
     }
 }

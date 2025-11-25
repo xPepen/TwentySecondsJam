@@ -1,18 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Game.Scripts.Runtime.LightAndShadow;
 
 namespace Game.Scripts.Core.Generator
 {
     public class RoomConnectionGenerator
     {
-        private GameObject container;
-        private LevelGenConfig config;
+        private readonly GameObject _container;
+        private readonly LevelGenConfig _config;
         
         public RoomConnectionGenerator(LevelGenConfig config)
         {
-            this.config = config;
-            // Ensure container is created or found
-            this.container = new GameObject("Corridors");
+            this._config = config;
+            this._container = new GameObject("Corridors");
         }
 
         public void ConnectRooms(RoomGraph graph)
@@ -28,7 +28,6 @@ namespace Game.Scripts.Core.Generator
                     
                     CreateCorridorMesh(room, neighbor);
                     
-                    // NEW: Spawn TWO door objects
                     SpawnDoors(room, neighbor); 
                     
                     processed.Add((room, neighbor));
@@ -36,12 +35,27 @@ namespace Game.Scripts.Core.Generator
             }
         }
 
-        /// <summary>
-        /// Spawns two doors, one at the entrance to Room A and one at the entrance to Room B.
-        /// </summary>
+        private void CreateCorridorMesh(Room roomA, Room roomB)
+        {
+            Vector2 dir = (roomB.Center - roomA.Center).normalized;
+            
+            Vector3 startPos = GetDoorPosition(roomA, dir);
+            Vector3 endPos = GetDoorPosition(roomB, -dir);
+
+            GameObject corridor = LevelObjectFactory.CreateCorridorObject( _config,
+                $"Corridor_{roomA.Center}_{roomB.Center}", 
+                _container.transform
+            );
+
+            Mesh mesh = GenerateStraightCorridorMesh(startPos, endPos, dir);
+            
+            corridor.GetComponent<MeshFilter>().mesh = mesh;
+            corridor.GetComponent<MeshCollider>().sharedMesh = mesh;
+        }
+
         private void SpawnDoors(Room roomA, Room roomB)
         {
-            if (config.DoorPrefab == null)
+            if (_config.DoorPrefab == null)
             {
                 Debug.LogError("DoorPrefab is missing in the LevelGenConfig! Please assign a prefab.");
                 return;
@@ -62,58 +76,33 @@ namespace Game.Scripts.Core.Generator
             Quaternion compensationRotation = Quaternion.Euler(0, 90f, 0);
             Quaternion doorRotation = baseRotation * compensationRotation;
 
-            // --- DOOR 1: At Room A's boundary ---
             InstantiateDoor(roomA, roomB, startPos, doorRotation);
 
-            // --- DOOR 2: At Room B's boundary ---
             InstantiateDoor(roomA, roomB, endPos, doorRotation);
         }
 
         private void InstantiateDoor(Room roomA, Room roomB, Vector3 position, Quaternion rotation)
         {
-
             Vector3 finalPos = position;
-            finalPos.y = config.DoorHeight;
+            finalPos.y = _config.DoorHeight;
             
             GameObject doorInstance = Object.Instantiate(
-                config.DoorPrefab, 
+                _config.DoorPrefab, 
                 finalPos, 
                 rotation, 
-                container.transform
+                _container.transform
             );
-            
-            
-            // Debug.Log($"Door spawned successfully between {roomA.Rect.center} and {roomB.Rect.center} at position {position}.");
             
             // Link the door to the rooms
             DoorLinker linker = doorInstance.GetComponent<DoorLinker>();
             if (!linker)
             {
-                // Add linker if not present on prefab
                 linker = doorInstance.AddComponent<DoorLinker>();
             }
             linker.Initialize(roomA, roomB);
-        }
-        
-        private void CreateCorridorMesh(Room roomA, Room roomB)
-        {
-            Vector2 dir = (roomB.Center - roomA.Center).normalized;
             
-            Vector3 startPos = GetDoorPosition(roomA, dir);
-            Vector3 endPos = GetDoorPosition(roomB, -dir);
-
-            GameObject corridor = new GameObject($"Corridor_{roomA.Center}_{roomB.Center}");
-            corridor.transform.SetParent(container.transform);
-
-            MeshFilter mf = corridor.AddComponent<MeshFilter>();
-            MeshRenderer mr = corridor.AddComponent<MeshRenderer>();
-            MeshCollider mc = corridor.AddComponent<MeshCollider>();
-
-            mr.sharedMaterials = new Material[] { config.FloorMaterial, config.WallMaterial };
-
-            Mesh mesh = GenerateStraightCorridorMesh(startPos, endPos, dir);
-            mf.mesh = mesh;
-            mc.sharedMesh = mesh;
+            EnviroObject enviroObject = doorInstance.AddComponent<EnviroObject>();
+            Subsystem.Get<LightAndShadowSubsystem>().Add(enviroObject);
         }
 
         private Vector3 GetDoorPosition(Room room, Vector2 dir)
@@ -137,8 +126,8 @@ namespace Game.Scripts.Core.Generator
             List<int> floorTris = new List<int>();
             List<int> wallTris = new List<int>();
 
-            float w = config.DoorWidth * 0.5f;
-            float h = config.WallHeight;
+            float w = _config.DoorWidth * 0.5f;
+            float h = _config.WallHeight;
             
             // Calculate Right Vector (Perpendicular to direction)
             Vector3 right = new Vector3(-dir2D.y, 0, dir2D.x); 
@@ -152,9 +141,9 @@ namespace Game.Scripts.Core.Generator
 
             float len = Vector3.Distance(start, end);
             uvs.Add(new Vector2(0, 0));
-            uvs.Add(new Vector2(config.DoorWidth, 0));
+            uvs.Add(new Vector2(_config.DoorWidth, 0));
             uvs.Add(new Vector2(0, len));
-            uvs.Add(new Vector2(config.DoorWidth, len));
+            uvs.Add(new Vector2(_config.DoorWidth, len));
 
             // Floor Winding: 0 -> 1 -> 2 (Clockwise = Faces UP)
             floorTris.AddRange(new int[] { 0, 1, 2, 2, 1, 3 });
@@ -172,8 +161,8 @@ namespace Game.Scripts.Core.Generator
 
             // Wall Winding 1: (1 -> 2 -> 0 / 3 -> 2 -> 1) - Faces INWARD
             wallTris.AddRange(new int[] { 
-                vBase + 1, vBase + 2, vBase,  // Triangle 1: EndBottom, StartTop, StartBottom
-                vBase + 3, vBase + 2, vBase + 1   // Triangle 2: EndTop, StartTop, EndBottom
+                vBase + 1, vBase + 2, vBase,  
+                vBase + 3, vBase + 2, vBase + 1   
             });
 
             // --- WALL 2 (Left Side - Looking Down Corridor) ---

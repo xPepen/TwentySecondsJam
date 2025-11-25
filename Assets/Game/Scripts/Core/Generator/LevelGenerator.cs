@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.AI.Navigation;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -6,57 +9,89 @@ namespace Game.Scripts.Core.Generator
     public class LevelGenerator : MonoBehaviour
     {
         [SerializeField] private LevelGenConfig config;
-        // Fixed Types here:
-        private RoomLayoutGenerator layoutGenerator; // Logic
-        private RoomMeshGenerator meshGenerator; // 3D Rooms
-        private RoomConnectionGenerator connectionGenerator; // 3D Corridors
+        
+        private RoomLayoutGenerator _layoutGenerator;
+        private RoomMeshGenerator _meshGenerator;
+        private RoomConnectionGenerator _connectionGenerator;
 
-        public void SetConfig(LevelGenConfig config)
-        {
-            this.config = config;
-        }
+        private List<Room> _rooms;
+        
+        public void SetConfig(LevelGenConfig conf) => this.config = conf;
+        public List<Room> GetRooms() => _rooms;
 
         [ContextMenu("Generate")]
-        public void Generate()
+        public async void Generate()
         {
             if (!config) return;
-            Clear();
+            
+            await GenerateRoutine();
+        }
 
+        private async Task GenerateRoutine()
+        {
+            Clear();
             Random.InitState(config.Seed);
 
             // Initialize Generators
-            layoutGenerator = new RoomLayoutGenerator(config);
-            meshGenerator = new RoomMeshGenerator(config);
-            // Ensuring config is passed for DoorPrefab access
-            connectionGenerator = new RoomConnectionGenerator(config);
+            _layoutGenerator = new RoomLayoutGenerator(config);
+            _meshGenerator = new RoomMeshGenerator(config);
+            _connectionGenerator = new RoomConnectionGenerator(config);
 
-            // 1. Generate Logic Data (Rooms & Connection Graph)
-            var levelData = layoutGenerator.GenerateLevel();
+            var levelData = _layoutGenerator.GenerateLevel();
+            await Task.Yield(); 
 
-            // 2. Build Graph (Helper for neighbors)
             var graph = new RoomGraph(levelData.Rooms, levelData.Connections);
+            
+            _meshGenerator.Generate(graph);
+            await Task.Yield();
 
-            // 3. Generate 3D Meshes for Rooms
-            meshGenerator.Generate(graph);
+            _connectionGenerator.ConnectRooms(graph);
+            await Task.Yield();
+            
+            _rooms = levelData.Rooms;
 
-            // 4. Generate Connections (Corridor Meshes and Doors)
-            connectionGenerator.ConnectRooms(graph);
+            if (config.BakeNavMesh)
+            {
+                await BakeIndividualNavMeshes();
+            }
+        }
+
+        private async Task BakeIndividualNavMeshes()
+        {
+            int yieldCounter = 0;
+
+            foreach (var room in _rooms)
+            {
+                if (room.RoomObject != null)
+                {
+                    BakeObject(room.RoomObject);
+                }
+                
+                if (++yieldCounter % 5 == 0) await Task.Yield();
+            }
+        }
+
+        private void BakeObject(GameObject obj)
+        {
+            NavMeshSurface surface = obj.AddComponent<NavMeshSurface>();
+
+            surface.collectObjects = CollectObjects.Children; 
+            surface.center = obj.transform.position; 
+            surface.BuildNavMesh(); 
         }
 
         void Clear()
         {
-            // Destroy children created by this generator
-            foreach (Transform child in transform)
-            {
-                DestroyImmediate(child.gameObject);
-            }
-
-            // Cleanup loose containers
+            foreach (Transform child in transform) DestroyImmediate(child.gameObject);
+            
             GameObject roomsContainer = GameObject.Find("Rooms");
             if (roomsContainer) DestroyImmediate(roomsContainer);
 
             GameObject corridorsContainer = GameObject.Find("Corridors");
             if (corridorsContainer) DestroyImmediate(corridorsContainer);
+            
+            GameObject navObj = GameObject.Find("NavMesh_Surface");
+            if(navObj) DestroyImmediate(navObj);
         }
 
         private void Start()

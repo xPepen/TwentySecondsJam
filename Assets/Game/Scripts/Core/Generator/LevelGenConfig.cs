@@ -1,3 +1,4 @@
+using Game.Scripts.Runtime.LightAndShadow;
 using UnityEngine;
 
 namespace Game.Scripts.Core.Generator
@@ -15,14 +16,18 @@ namespace Game.Scripts.Core.Generator
         
         [field:Header("Visuals")]
         [field: SerializeField] public Material FloorMaterial { get; private set; }
+        [field: SerializeField] public ColorType InitialFloorColor { get; private set; } = ColorType.White;
         [field: SerializeField] public Material WallMaterial { get; private set; }
+        [field: SerializeField] public ColorType InitialWallColor { get; private set; } = ColorType.Black;
         [field: SerializeField] public float WallHeight { get; private set; } = 3.5f;
         [field: SerializeField] public float WallThickness { get; private set; } = 0.5f;
         [field: SerializeField] public float DoorWidth { get; private set; } = 2.0f;
         
         
         [field:Header("Prefabs")]
-        // New: Door Prefab reference
         [field: SerializeField] public GameObject DoorPrefab { get; private set; }
+        
+        [field: Header("AI Navigation")]
+        [field: SerializeField] public bool BakeNavMesh { get; private set; } = true;
     }
 }
