@@ -8,8 +8,8 @@ namespace Game.Scripts.GAS.VariableSet
     [System.Serializable]
     public class GameplayVariableSetGeneric<Tag, Value>
     {
-        [field: SerializeField] public Tag VariableTag { get; private set; }
-        [field: SerializeField] public Value VariableValue { get; private set; }
+        [field: SerializeField] public Tag VariableTag { get; set; }
+        [field: SerializeField] public Value VariableValue { get; set; }
     }
 
     [CreateAssetMenu(fileName = "GameplayPropertySet", menuName = "Game/GameplayPropertySet", order = 0)]

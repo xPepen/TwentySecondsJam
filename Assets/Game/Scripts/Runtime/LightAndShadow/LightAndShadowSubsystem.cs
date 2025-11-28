@@ -24,6 +24,11 @@ namespace Game.Scripts.Runtime.LightAndShadow
             }
         }
 
+        public void Clear()
+        {
+            _enviroObjects.Clear();
+        }
+
         private ColorType x;
         private void Update()
         {

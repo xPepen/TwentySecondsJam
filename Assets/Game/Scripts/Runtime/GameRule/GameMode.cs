@@ -25,13 +25,13 @@ namespace Game.Scripts.Runtime.GameRule
 
         private void Awake()
         {
-            if (!this.GetInternalComponent<PlayerCharacter>(PlayerPrefab))
+            if (!PlayerPrefab.GetInternalComponent<PlayerCharacter>())
             {
                 Debug.LogError("PlayerCharacter doesn't have a PlayerCharacter");
                 return;
             }
 
-            if (!this.GetInternalComponent<HUDCore>(HUDPrefab))
+            if (!HUDPrefab.GetInternalComponent<HUDCore>())
             {
                 Debug.LogError("PlayerCharacter doesn't have a PlayerCharacter");
                 return;
@@ -40,7 +40,8 @@ namespace Game.Scripts.Runtime.GameRule
 
         private void Start()
         {
-            SceneManager.LoadScene(FisrtScene, LoadSceneMode.Additive);
+            //todo : add a real scene management helper
+            // SceneManager.LoadScene(FisrtScene, LoadSceneMode.Additive);
             
             //todo : add init function to have a better initialization flow
 
@@ -73,7 +74,7 @@ namespace Game.Scripts.Runtime.GameRule
             }
 
             GameObject objInstance = Instantiate(obj, location, rotation, root ? root : null);
-            T component = this.GetInternalComponent<T>(objInstance);
+            T component = objInstance.GetInternalComponent<T>();
 
             return component ? component : null;
         }

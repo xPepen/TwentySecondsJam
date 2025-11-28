@@ -10,17 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1b75e95fee24f40a2e6a755c3fe25b1, type: 3}
-  m_Name: New Level Gen Config
+  m_Name: LevelGenConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.Generator.LevelGenConfig
-  <Seed>k__BackingField: 7820497
+  <Seed>k__BackingField: 36770
+  <BranchChance>k__BackingField: 0.51
+  <SingleDoorChance>k__BackingField: 0.545
   <RoomCount>k__BackingField: 20
   <RoomSizeMin>k__BackingField: {x: 20, y: 20}
-  <RoomSizeMax>k__BackingField: {x: 25, y: 25}
-  <Spacing>k__BackingField: 2
-  <DoorHeight>k__BackingField: 1.5
+  <RoomSizeMax>k__BackingField: {x: 30, y: 35}
+  <Spacing>k__BackingField: 1
+  <DoorHeight>k__BackingField: 3
   <FloorMaterial>k__BackingField: {fileID: 2100000, guid: 1367965f8107bef4d9757e8805cc9868, type: 2}
+  <InitialFloorColor>k__BackingField: 1
   <WallMaterial>k__BackingField: {fileID: 2100000, guid: 1367965f8107bef4d9757e8805cc9868, type: 2}
+  <InitialWallColor>k__BackingField: 0
   <WallHeight>k__BackingField: 5
   <WallThickness>k__BackingField: 0.5
   <DoorWidth>k__BackingField: 2
-  <DoorPrefab>k__BackingField: {fileID: 5559093380170554014, guid: b2592d8f7f3f43e44a4fce1afc832863, type: 3}
+  <DoorPrefab>k__BackingField: {fileID: 9131978593808455020, guid: e55d436515f4eb1439c2c44e3914c809, type: 3}
+  <BakeNavMesh>k__BackingField: 1

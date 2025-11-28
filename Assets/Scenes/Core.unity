@@ -387,6 +387,7 @@ GameObject:
   - component: {fileID: 1752931494}
   - component: {fileID: 1752931493}
   - component: {fileID: 1752931495}
+  - component: {fileID: 1752931496}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -407,6 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.Generator.LevelGenerator
   config: {fileID: 11400000, guid: 78eab81c23613e048b2f51f8c835e373, type: 2}
+  Enemy: {fileID: 7613667735939795028, guid: d64e06df299830c40aedb6823f8afd58, type: 3}
 --- !u!4 &1752931494
 Transform:
   m_ObjectHideFlags: 0
@@ -434,6 +436,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24bfa56d95448e5a1ffcb90a44da967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Runtime.LightAndShadow.LightAndShadowSubsystem
+--- !u!114 &1752931496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752931492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fa3501a78f54c8780fa4fdac733100a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.StateMachine.StateMachine
+  _stateObjects: []
 --- !u!114 &2236198508172279608
 MonoBehaviour:
   m_ObjectHideFlags: 0

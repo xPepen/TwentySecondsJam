@@ -6,10 +6,7 @@ namespace Game.Scripts.Core.Generator
 {
     public class RoomLayoutGenerator
     {
-        private LevelGenConfig config;
-
-        private const float BRANCH_CHANCE = 0.5f;
-        private const float SINGLE_DOOR_CHANCE = 0.20f;
+        private readonly LevelGenConfig _config;
 
         public class LevelData
         {
@@ -29,7 +26,7 @@ namespace Game.Scripts.Core.Generator
 
         public RoomLayoutGenerator(LevelGenConfig config)
         {
-            this.config = config;
+            this._config = config;
         }
 
         public LevelData GenerateLevel()
@@ -42,7 +39,7 @@ namespace Game.Scripts.Core.Generator
             gridRooms[start] = CreateRoomAtGrid(start);
             frontier.Enqueue(start);
 
-            while (gridRooms.Count < config.RoomCount)
+            while (gridRooms.Count < _config.RoomCount)
             {
                 if (frontier.Count == 0)
                 {
@@ -58,7 +55,7 @@ namespace Game.Scripts.Core.Generator
 
                 foreach (var dir in DIRECTIONS)
                 {
-                    if (gridRooms.Count >= config.RoomCount) break;
+                    if (gridRooms.Count >= _config.RoomCount) break;
 
                     Vector2Int nextPos = currentPos + dir;
 
@@ -67,15 +64,14 @@ namespace Game.Scripts.Core.Generator
                         continue;
 
                     // Random chance to skip this direction
-                    if (Random.value > BRANCH_CHANCE)
+                    if (Random.value > _config.BranchChance)
                         continue;
 
-                    // Create the new room
                     Room newRoom = CreateRoomAtGrid(nextPos);
 
                     int neighborCount = CountNeighbors(currentPos);
                     bool parentSingle = (neighborCount <= 1);
-                    newRoom.IsSingleDoorRoom = parentSingle && Random.value < SINGLE_DOOR_CHANCE;
+                    newRoom.IsSingleDoorRoom = parentSingle && Random.value < _config.SingleDoorChance;
 
                     gridRooms[nextPos] = newRoom;
                     frontier.Enqueue(nextPos);
@@ -95,8 +91,8 @@ namespace Game.Scripts.Core.Generator
         {
             Vector2 size = GenerateSize();
 
-            float cellWidth = config.RoomSizeMax.x * config.Spacing;
-            float cellHeight = config.RoomSizeMax.y * config.Spacing;
+            float cellWidth = _config.RoomSizeMax.x * _config.Spacing;
+            float cellHeight = _config.RoomSizeMax.y * _config.Spacing;
 
             Vector2 worldCenter = new Vector2(
                 gridPos.x * cellWidth,
@@ -116,8 +112,8 @@ namespace Game.Scripts.Core.Generator
         private Vector2 GenerateSize()
         {
             return new Vector2(
-                Random.Range(config.RoomSizeMin.x, config.RoomSizeMax.x),
-                Random.Range(config.RoomSizeMin.y, config.RoomSizeMax.y)
+                Random.Range(_config.RoomSizeMin.x, _config.RoomSizeMax.x),
+                Random.Range(_config.RoomSizeMin.y, _config.RoomSizeMax.y)
             );
         }
 

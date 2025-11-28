@@ -13,7 +13,7 @@ namespace Game.Scripts.Core.Utility.Shader
 
         private void Awake()
         {
-            Renderer = this.GetInternalComponent<Renderer>(gameObject);
+            Renderer = gameObject.GetInternalComponent<Renderer>();
             _mpb = new MaterialPropertyBlock();
         }
 

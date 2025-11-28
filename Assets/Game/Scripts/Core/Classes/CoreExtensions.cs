@@ -7,23 +7,12 @@ namespace Game.Scripts.Core.Classes
     {
         public static bool IsA<T>(this GameObject obj)
         {
-            if (obj.GetComponent<T>() != null)
-            {
-                return true;
-            }
-
-            return obj.GetComponentInChildren<T>() != null;
+            return obj.GetInternalComponent<T>() != null;
         }
 
         public static bool IsA<T>(this GameObject obj, out T outObj)
         {
-            outObj = obj.GetComponent<T>();
-            if (outObj != null)
-            {
-                return true;
-            }
-
-            outObj = obj.GetComponentInChildren<T>();
+            outObj = obj.GetInternalComponent<T>();
             return outObj != null;
         }
 
@@ -37,7 +26,7 @@ namespace Game.Scripts.Core.Classes
             return false;
         }
 
-        public static T GetInternalComponent<T>(this MonoBehaviour mono, GameObject obj) where T : UnityEngine.Component
+        public static T GetInternalComponent<T>(this GameObject obj)
         {
             T component = obj.GetComponent<T>();
             if (component != null)
@@ -53,14 +42,10 @@ namespace Game.Scripts.Core.Classes
             }
 
             component = obj.GetComponentInParent<T>();
-            if (component != null)
-            {
-                return component;
-            }
-
-            return null;
+            //at this point @component could be null
+            return component;
         }
-        
+
         public static Texture2D LoadTexture(this MonoBehaviour mono, string filePath)
         {
             if (System.IO.File.Exists(Application.dataPath + filePath))
