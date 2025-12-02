@@ -13,8 +13,6 @@ namespace Game.Scripts.Runtime
         private SerializableInterface<IStateObject> _currentState;
         [SerializeField] private StateMachine stateMachine;
         
-        [SerializeReference]private StateObjectBase state = new StateTst();
-        
         private void Start()
         {
             // _currentState = Contrainer.ins();

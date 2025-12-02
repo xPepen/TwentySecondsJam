@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.Scripts.Core.Classes;
 using Unity.AI.Navigation;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -61,7 +60,7 @@ namespace Game.Scripts.Core.Generator
 
             var obj = Object.Instantiate(prefab, position, rotation);
             RoomObjects.Add(obj);
-            onObjectAdded?.Invoke(prefab);
+            onObjectAdded?.Invoke(obj);
             // if(obj.IsA<Braviour>())
         }
         

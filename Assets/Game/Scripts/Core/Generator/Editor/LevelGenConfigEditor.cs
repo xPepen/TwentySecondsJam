@@ -18,10 +18,7 @@ public class LevelGenConfigEditor : Editor
     private SerializedProperty _spacing;
     private SerializedProperty _doorHeight;
 
-    private SerializedProperty _floorMaterial;
-    private SerializedProperty _initialFloorColor;
-    private SerializedProperty _wallMaterial;
-    private SerializedProperty _initialWallColor;
+    private SerializedProperty _objectData;
     private SerializedProperty _wallHeight;
     private SerializedProperty _wallThickness;
     private SerializedProperty _doorWidth;
@@ -41,10 +38,7 @@ public class LevelGenConfigEditor : Editor
         _spacing = serializedObject.FindProperty("<Spacing>k__BackingField");
         _doorHeight = serializedObject.FindProperty("<DoorHeight>k__BackingField");
 
-        _floorMaterial = serializedObject.FindProperty("<FloorMaterial>k__BackingField");
-        _initialFloorColor = serializedObject.FindProperty("<InitialFloorColor>k__BackingField");
-        _wallMaterial = serializedObject.FindProperty("<WallMaterial>k__BackingField");
-        _initialWallColor = serializedObject.FindProperty("<InitialWallColor>k__BackingField");
+        _objectData = serializedObject.FindProperty("<ObjectData>k__BackingField");
         _wallHeight = serializedObject.FindProperty("<WallHeight>k__BackingField");
         _wallThickness = serializedObject.FindProperty("<WallThickness>k__BackingField");
         _doorWidth = serializedObject.FindProperty("<DoorWidth>k__BackingField");
@@ -61,9 +55,14 @@ public class LevelGenConfigEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(_seed);
+        
         if (GUILayout.Button("Random Seed", GUILayout.Width(100)))
         {
-            _seed.intValue = Random.Range(1, 100000);
+            LevelGenerator LG = Subsystem.Get<LevelGenerator>();
+            if (LG != null)
+            {
+                LG.GenerateSeed();
+            }
         }
 
         EditorGUILayout.EndHorizontal();
@@ -90,11 +89,7 @@ public class LevelGenConfigEditor : Editor
 
         EditorGUILayout.LabelField("🧱 Visuals & Geometry", EditorStyles.boldLabel);
 
-        EditorGUILayout.PropertyField(_floorMaterial, new GUIContent("Floor Material"));
-        EditorGUILayout.PropertyField(_initialFloorColor, new GUIContent("Initial Floor Color"));
-
-        EditorGUILayout.PropertyField(_wallMaterial, new GUIContent("Wall Material"));
-        EditorGUILayout.PropertyField(_initialWallColor, new GUIContent("Initial Wall Color"));
+        EditorGUILayout.PropertyField(_objectData, new GUIContent("Object information"));
         EditorGUILayout.PropertyField(_wallHeight, new GUIContent("Wall Height"));
         EditorGUILayout.PropertyField(_wallThickness, new GUIContent("Wall Thickness"));
 

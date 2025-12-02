@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Game.Scripts.GAS.VariableSet;
+using Game.Scripts.Core.Utility;
 using GameplayTags;
 using UnityEngine;
 
@@ -10,46 +10,64 @@ namespace Game.Scripts.Core.StateMachine
     {
         private UnityEngine.Object _owner;
 
-        private Dictionary<int, StateObjectBase> _states = new();
-        public StateObjectBase CurrentState { get; private set; }
 
+        [SerializeField] private GameplayTag InitialState;
 
-        private void Update()
+        //only act as initializer container for editor
+        [SerializeField] private List<Binder<GameplayTag, StateBase>> stateObjects = new();
+
+        private Dictionary<int, StateBase> _states = new();
+        public StateBase CurrentState { get; private set; }
+
+        public void f(float x)
         {
-            if (ShouldUpdate(StateUpdateType.Update | StateUpdateType.All))
-            {
-                CurrentState.OnUpdate(Time.deltaTime);
-            }
+            print(x);
         }
+        // private void Update()
+        // {
+        //     if (ShouldUpdate(TickType.Update | TickType.All))
+        //     {
+        //         CurrentState.OnUpdate(Time.deltaTime);
+        //     }
+        // }
+        //
+        // private void FixedUpdate()
+        // {
+        //     if (ShouldUpdate(TickType.FixedUpdate | TickType.All))
+        //     {
+        //         CurrentState.OnFixedUpdate(Time.deltaTime);
+        //     }
+        // }
+        //
+        // private bool ShouldUpdate(TickType targetType)
+        // {
+        //     if (CurrentState == null)
+        //     {
+        //         return false;
+        //     }
+        //
+        //     return (CurrentState.StateUpdateType & targetType) != 0;
+        // }
 
-        private void FixedUpdate()
+        public void Init(Object owner)
         {
-            if (ShouldUpdate(StateUpdateType.FixedUpdate | StateUpdateType.All))
-            {
-                CurrentState.OnFixedUpdate(Time.deltaTime);
-            }
-        }
-
-        private bool ShouldUpdate(StateUpdateType targetType)
-        {
-            if (CurrentState == null)
-            {
-                return false;
-            }
-
-            return (CurrentState.StateUpdateType & targetType) != 0;
-        }
-
-        public void Init(UnityEngine.Object owner, List<GameplayVariableSetGeneric<GameplayTag, StateObjectBase>> stateObjects = null)
-        {
-            _owner = owner;
-
-            if (stateObjects == null) return;
-            
             foreach (var stateObject in stateObjects)
             {
-                AddState(stateObject.VariableTag, stateObject.VariableValue);
+                AddState(stateObject.ItemA, stateObject.ItemB);
             }
+
+            SwitchState(InitialState);
+        }
+
+        public StateBase GetState(GameplayTag gameplay)
+        {
+            // ReSharper disable once CanSimplifyDictionaryTryGetValueWithGetValueOrDefault
+            if (_states.TryGetValue(gameplay.GetID(), out var state))
+            {
+                return state;
+            }
+
+            return null;
         }
 
         public void SwitchState(GameplayTag gameplay)
@@ -64,7 +82,7 @@ namespace Game.Scripts.Core.StateMachine
         }
 
 
-        public void AddState(GameplayTag gameplay, StateObjectBase state)
+        public void AddState(GameplayTag gameplay, StateBase state)
         {
             if (!GameplayTag.IsValid(gameplay) || state == null)
             {
@@ -73,7 +91,7 @@ namespace Game.Scripts.Core.StateMachine
 
             if (_states.TryAdd(gameplay.GetID(), state))
             {
-                state.Init(_owner, SwitchState);
+                state.Init(_owner, SwitchState, gameplay);
             }
         }
 
@@ -91,18 +109,17 @@ namespace Game.Scripts.Core.StateMachine
 
             if (_states.Remove(tagID, out var state))
             {
-                state.OnClear();
+                state.OnDestroy();
             }
         }
 
-        public void ClearStates()
+        public void DestroyStates()
         {
             foreach (var state in _states.Values)
             {
-                state.OnClear();
+                state.OnDestroy();
             }
 
-            //dump all states
             _states.Clear();
         }
     }

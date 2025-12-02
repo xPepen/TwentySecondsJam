@@ -1,17 +1,24 @@
-using Game.Scripts.Core.Generator.Interface;
 using UnityEngine;
 
 namespace Game.Scripts.Core.Generator
 {
     public class Door : MonoBehaviour
     {
-        [field: Header("Behaviours")]
-        [field: SerializeField]
-        public TNRD.SerializableInterface<ICollisionBehaviourHandle> OnTriggerWithDoor { get; private set; }
-
-        [SerializeField] private GameObject DoorObject; 
+        [SerializeField] private GameObject DoorObject;
         public Room RoomA;
         public Room RoomB;
+
+        public bool IsLocked { get; private set; }
+
+        public void Lock()
+        {
+            IsLocked = true;
+        }
+
+        public void UnLock()
+        {
+            IsLocked = false;
+        }
 
         public void Initialize(Room roomA, Room roomB)
         {
@@ -19,6 +26,7 @@ namespace Game.Scripts.Core.Generator
             this.RoomB = roomB;
             this.name = $"Door_to_{roomA.Rect.center}_and_{roomB.Rect.center}";
         }
+
         public void Open()
         {
             var v = DoorObject.transform.position;
@@ -34,19 +42,14 @@ namespace Game.Scripts.Core.Generator
         }
 
 
-        public void SetDoorHandle(ICollisionBehaviourHandle handle)
-        {
-            OnTriggerWithDoor.Value = handle;
-        }
-
         private void OnTriggerEnter(Collider other)
         {
-            OnTriggerWithDoor.Value.OnTriggerEnter(gameObject, other);
+            Open();
         }
-        
+
         private void OnTriggerExit(Collider other)
         {
-            OnTriggerWithDoor.Value.OnTriggerExit(gameObject, other);
+            Close();
         }
     }
 }

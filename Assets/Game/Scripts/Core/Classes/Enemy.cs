@@ -6,7 +6,6 @@ using Game.Scripts.Runtime.Entity;
 using GameplayTags;
 using UnityEngine;
 using UnityEngine.AI;
-
 using Random = UnityEngine.Random;
 
 namespace Game.Scripts.Core.Classes
@@ -23,6 +22,8 @@ namespace Game.Scripts.Core.Classes
     [RequireComponent(typeof(NavMeshAgent))]
     public abstract class Enemy : Character
     {
+        public StateMachine.StateMachine StateMachine { get; private set; }
+        
         [SerializeField] private ExperienceReward ExperienceReward;
         public Rigidbody RigidBody { get; private set; }
         public NavMeshAgent NavMeshAgent { get; private set; }
@@ -38,10 +39,11 @@ namespace Game.Scripts.Core.Classes
         protected override void OnAwake()
         {
             base.OnAwake();
+            
             _collider = GetComponent<Collider>();
             RigidBody = GetComponent<Rigidbody>();
-            
             NavMeshAgent = GetComponent<NavMeshAgent>();
+            StateMachine = GetComponent<StateMachine.StateMachine>();
         }
 
         protected override void OnStart()
@@ -49,6 +51,9 @@ namespace Game.Scripts.Core.Classes
             //we need to initialize before we start any logic that might depend on it
             OnInitialize();
             base.OnStart();
+            StateMachine = GetComponent<StateMachine.StateMachine>();
+            
+            StateMachine.Init(this);
         }
 
         public override float GetHeight()

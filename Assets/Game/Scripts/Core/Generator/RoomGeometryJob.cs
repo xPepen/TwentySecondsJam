@@ -6,9 +6,6 @@ using UnityEngine;
 
 namespace Game.Scripts.Core.Generator
 {
-    /// <summary>
-    /// Burst-compiled job to calculate room geometry logic in parallel.
-    /// </summary>
     [BurstCompile]
     public struct RoomGeometryJob : IJob
     {
@@ -18,14 +15,15 @@ namespace Game.Scripts.Core.Generator
         public float DoorWidth;
         public float DoorHeight;
         
-        // Neighbor info packed: [0]=North, [1]=South, [2]=East, [3]=West. 1 = has neighbor, 0 = no neighbor.
         public int4 NeighborFlags; 
 
-        // Outputs (using NativeList for dynamic sizing)
+        // Outputs
         public NativeList<float3> Vertices;
         public NativeList<float2> UVs;
         public NativeList<int> FloorTriangles;
         public NativeList<int> WallTriangles;
+        // NEW: Output for roof
+        public NativeList<int> RoofTriangles;
 
         public void Execute()
         {
@@ -33,14 +31,13 @@ namespace Game.Scripts.Core.Generator
             GenerateFloor();
 
             // 2. Generate Walls
-            // North (+Z)
-            TryGenerateWall(new float2(0, 1), NeighborFlags[0] == 1);
-            // South (-Z)
-            TryGenerateWall(new float2(0, -1), NeighborFlags[1] == 1);
-            // East (+X)
-            TryGenerateWall(new float2(1, 0), NeighborFlags[2] == 1);
-            // West (-X)
-            TryGenerateWall(new float2(-1, 0), NeighborFlags[3] == 1);
+            TryGenerateWall(new float2(0, 1), NeighborFlags[0] == 1); // North
+            TryGenerateWall(new float2(0, -1), NeighborFlags[1] == 1); // South
+            TryGenerateWall(new float2(1, 0), NeighborFlags[2] == 1); // East
+            TryGenerateWall(new float2(-1, 0), NeighborFlags[3] == 1); // West
+            
+            // 3. Generate Roof
+            GenerateRoof();
         }
 
         private void GenerateFloor()
@@ -50,20 +47,18 @@ namespace Game.Scripts.Core.Generator
             float yMin = Rect.yMin;
             float yMax = Rect.yMax;
 
-            // Vertices
             int startIdx = Vertices.Length;
             Vertices.Add(new float3(xMin, 0, yMin));
             Vertices.Add(new float3(xMax, 0, yMin));
             Vertices.Add(new float3(xMin, 0, yMax));
             Vertices.Add(new float3(xMax, 0, yMax));
 
-            // UVs
             UVs.Add(new float2(0, 0));
             UVs.Add(new float2(Rect.width, 0));
             UVs.Add(new float2(0, Rect.height));
             UVs.Add(new float2(Rect.width, Rect.height));
 
-            // Triangles
+            // Clockwise winding (Points UP)
             FloorTriangles.Add(startIdx + 0);
             FloorTriangles.Add(startIdx + 2);
             FloorTriangles.Add(startIdx + 1);
@@ -72,6 +67,42 @@ namespace Game.Scripts.Core.Generator
             FloorTriangles.Add(startIdx + 1);
         }
 
+        private void GenerateRoof()
+        {
+            float xMin = Rect.xMin;
+            float xMax = Rect.xMax;
+            float yMin = Rect.yMin;
+            float yMax = Rect.yMax;
+            float h = WallHeight;
+
+            // We create new vertices for the roof to ensure flat shading
+            // If we shared vertices with walls, the normals might smooth weirdly at the corners
+            int startIdx = Vertices.Length;
+            Vertices.Add(new float3(xMin, h, yMin)); // 0
+            Vertices.Add(new float3(xMax, h, yMin)); // 1
+            Vertices.Add(new float3(xMin, h, yMax)); // 2
+            Vertices.Add(new float3(xMax, h, yMax)); // 3
+
+            UVs.Add(new float2(0, 0));
+            UVs.Add(new float2(Rect.width, 0));
+            UVs.Add(new float2(0, Rect.height));
+            UVs.Add(new float2(Rect.width, Rect.height));
+
+            // Counter-Clockwise winding (Points DOWN, visible from inside)
+            // 0 -> 1 -> 2
+            RoofTriangles.Add(startIdx + 0);
+            RoofTriangles.Add(startIdx + 1);
+            RoofTriangles.Add(startIdx + 2);
+            
+            // 2 -> 1 -> 3
+            RoofTriangles.Add(startIdx + 2);
+            RoofTriangles.Add(startIdx + 1);
+            RoofTriangles.Add(startIdx + 3);
+        }
+
+        // ... (TryGenerateWall, CreateSolidWall, CreateWallWithOpening, GetWallSegments, AddQuad, AddLintelQuad remain unchanged) ...
+        // Include the rest of the original file content here for TryGenerateWall downwards
+        
         private void TryGenerateWall(float2 dir, bool hasNeighbor)
         {
             if (hasNeighbor)
@@ -105,8 +136,6 @@ namespace Game.Scripts.Core.Generator
             float3 vDoorStartBottom = doorStartPos + new float3(0, DoorHeight, 0);
             float3 vDoorEndBottom = doorEndPos + new float3(0, DoorHeight, 0);
             
-            // We use (WallHeight - DoorHeight) as the height of the lintel quad
-            // But AddQuad expects absolute height from base, so we construct manually or offset
             AddLintelQuad(vDoorStartBottom, vDoorEndBottom, WallHeight - DoorHeight);
         }
 

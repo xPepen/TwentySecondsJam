@@ -15107,6 +15107,7 @@ GameObject:
   - component: {fileID: 7767717558385439800}
   - component: {fileID: 6768220510491845102}
   - component: {fileID: 1585775576874767771}
+  - component: {fileID: 2882188608145446541}
   m_Layer: 10
   m_Name: BombModelFinal
   m_TagString: Untagged
@@ -15306,6 +15307,42 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &2882188608145446541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3446008956166888548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fa3501a78f54c8780fa4fdac733100a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.StateMachine.StateMachine
+  InitialState: {fileID: 11400000, guid: 12976424e8b346e4dabf888de615e585, type: 2}
+  stateObjects:
+  - <ItemA>k__BackingField: {fileID: 11400000, guid: 12976424e8b346e4dabf888de615e585, type: 2}
+    <ItemB>k__BackingField:
+      <StateUpdateType>k__BackingField: 3
+      <TickPriority>k__BackingField: 0
+      <OnInitialize>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateEnter>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateUpdate>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateFixedUpdate>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateExit>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateDestroy>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
 --- !u!1 &3658403646893493465
 GameObject:
   m_ObjectHideFlags: 0

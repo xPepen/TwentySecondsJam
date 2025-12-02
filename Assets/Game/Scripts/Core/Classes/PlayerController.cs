@@ -2,6 +2,7 @@ using System;
 using Game.Scripts.Core.Classes;
 using Game.Scripts.Core.HUD;
 using Game.Scripts.Runtime.GameRule;
+using Gas.Component;
 using Gas.Variable;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,7 +18,7 @@ namespace Game.Scripts.Runtime.PlayerCore
 
         public PlayerInput PlayerInput { get; private set; }
         public InputComponent InputComponent { get; private set; }
-
+        public GameplayAbilityComponent GetAbilityComponent => PlayerCharacter?.GetGameplayAbilityComponent();
 
         public Action<float,float> OnHealthChangedEvent;
         public Action<float,float> OnMaxHealthChangedEvent;

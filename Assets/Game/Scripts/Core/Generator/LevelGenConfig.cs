@@ -1,15 +1,23 @@
-using Game.Scripts.Core.Generator.Interface;
-using Game.Scripts.Runtime.LightAndShadow;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Scripts.Core.Generator
 {
+    [System.Serializable]
+    public class ObjectGeneratorBinder
+    {
+        //should we use gameplayTag?
+        [field: SerializeField] public string ObjectName { get; private set; }
+        [field: SerializeField] public Color InitialColor { get; private set; }
+        [field: SerializeField] public Material Material { get; private set; }
+    }
+
     [CreateAssetMenu(menuName = "Level/LevelGenConfig")]
     public class LevelGenConfig : ScriptableObject
     {
         [field: Header("Generation Settings")]
         [field: SerializeField]
-        public int Seed { get; private set; } = 12345;
+        public int Seed { get; set; } = 12345;
 
         [Range(0.0f, 1.0f)]
         [field: SerializeField]
@@ -27,11 +35,8 @@ namespace Game.Scripts.Core.Generator
 
         [field: Header("Visuals")]
         [field: SerializeField]
-        public Material FloorMaterial { get; private set; }
+        public List<ObjectGeneratorBinder> ObjectData { get; private set; }
 
-        [field: SerializeField] public ColorType InitialFloorColor { get; private set; } = ColorType.White;
-        [field: SerializeField] public Material WallMaterial { get; private set; }
-        [field: SerializeField] public ColorType InitialWallColor { get; private set; } = ColorType.Black;
         [field: SerializeField] public float WallHeight { get; private set; } = 3.5f;
         [field: SerializeField] public float WallThickness { get; private set; } = 0.5f;
         [field: SerializeField] public float DoorWidth { get; private set; } = 2.0f;
@@ -39,7 +44,7 @@ namespace Game.Scripts.Core.Generator
 
         [field: Header("Prefabs")]
         [field: SerializeField]
-        public GameObject DoorPrefab { get; private set; }
+        public Door DoorPrefab { get; private set; }
 
         [field: Header("AI Navigation")]
         [field: SerializeField]

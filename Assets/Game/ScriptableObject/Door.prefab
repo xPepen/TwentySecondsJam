@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4624685478525461047}
   - component: {fileID: 555388987163626669}
   - component: {fileID: 7882900728935652531}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 2.77, z: 1.81}
+  m_LocalScale: {x: 0.1, y: 3, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2476802518263883294}
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 2476802518263883294}
   - component: {fileID: 7436987536380394681}
   - component: {fileID: 8620859107688567133}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,18 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee7e9a37f7346d491df6cd515931631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.Generator.Door
-  <OnTriggerWithDoor>k__BackingField:
-    mode: 1
-    unityReference: {fileID: 0}
-    rawReference:
-      rid: 6617271664173645914
   DoorObject: {fileID: 8587802161811829163}
-  references:
-    version: 2
-    RefIds:
-    - rid: 6617271664173645914
-      type: {class: MoveDoor, ns: Game.Scripts.Core.Generator.Interface, asm: Assembly-CSharp}
-      data: 
 --- !u!65 &8620859107688567133
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -188,5 +177,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 3.4833837, z: 4.0407124}
-  m_Center: {x: 0, y: -0.027136326, z: 0.07224649}
+  m_Size: {x: 4.9795966, y: 3.4833837, z: 4.0407124}
+  m_Center: {x: 0.34677196, y: -0.027136326, z: 0.07224655}

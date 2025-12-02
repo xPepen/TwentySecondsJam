@@ -1,65 +1,83 @@
+using System;
+using System.Collections.Generic;
+using Game.Scripts.Core.Classes;
 using UnityEngine;
 
 namespace Game.Scripts.Runtime.LightAndShadow
 {
     public class EnviroObject : MonoBehaviour, IMatColor
     {
+        private static readonly int BaseColor = Shader.PropertyToID(ColorParam);
         private MeshRenderer _mr;
         private MaterialPropertyBlock _block;
 
+        const string ColorParam = "_BaseColor";
+
         private void Awake()
         {
-            _mr = GetComponent<MeshRenderer>();
+            _mr = gameObject.GetInternalComponent<MeshRenderer>();
             _block = new();
         }
 
-        // public void Init()
-        // {
-        //     foreach (var v in (_mr.sharedMaterials))
-        //     {
-        //         var block = new MaterialPropertyBlock();
-        //
-        //         _mr.GetPropertyBlock(block);
-        //         block.SetColor("_BaseColor", Color.green); // or "_Color"
-        //         _mr.SetPropertyBlock(block);
-        //     }
-        // }
-
-        public void SetColor(ColorType type)
+        private void Start()
         {
-            Color c = type == ColorType.Black ? Color.black : Color.white;
-        
+            Subsystem.Get<LightAndShadowSubsystem>().Add(this);
+        }
+
+        private void OnDestroy()
+        {
+            LightAndShadowSubsystem subsystem = Subsystem.Get<LightAndShadowSubsystem>();
+            if (subsystem)
+            {
+                subsystem.Remove(this);
+            }
+        }
+
+        public void SetColor(Color color)
+        {
             if (!_mr)
             {
-                _mr = GetComponent<MeshRenderer>();
+                _mr = this.gameObject.GetInternalComponent<MeshRenderer>();
                 if (!_mr)
                 {
-                    Debug.Log("No mesh renderer found", this);
+                    Debug.Log("No mesh renderer found ->" + gameObject.name, this);
                     return;
                 }
             }
-        
+
             for (int i = 0; i < _mr.materials.Length; i++)
             {
-                _mr.GetPropertyBlock(_block, i);
-                _block.SetColor("_BaseColor", c);
-                _mr.SetPropertyBlock(_block, i);
+                var currColor = GetCurrentColor(i);
+                var finalColor = currColor == Color.white ? Color.black : Color.white;
+                SetColor(finalColor, i);
             }
         }
-        
-        public void SetMultipleColor(ColorType matColorA, ColorType matColorB)
+
+        private void SetColor(Color color, int subMeshIndex)
         {
-            Color colorA = matColorA == ColorType.Black ? Color.black : Color.white;
-            Color colorB = matColorB == ColorType.Black ? Color.black : Color.white;
-        
-            
-            _mr.GetPropertyBlock(_block, 0);
-            _block.SetColor("_BaseColor", colorA);
-            _mr.SetPropertyBlock(_block, 0);
-            
-            _mr.GetPropertyBlock(_block, 1);
-            _block.SetColor("_BaseColor", colorB);
-            _mr.SetPropertyBlock(_block, 1);
+            _mr.GetPropertyBlock(_block, subMeshIndex);
+            _block.SetColor(BaseColor, color);
+            _mr.SetPropertyBlock(_block, subMeshIndex);
+        }
+
+        public Color GetCurrentColor(int subMeshIndex)
+        {
+            _mr.GetPropertyBlock(_block, subMeshIndex);
+
+            if (_block.HasColor(BaseColor))
+            {
+                return _block.GetColor(BaseColor);
+            }
+
+            return _mr.sharedMaterials[subMeshIndex].GetColor(BaseColor);
+        }
+
+        public void Init(List<Color> colors)
+        {
+            for (var i = 0; i < colors.Count; i++)
+            {
+                SetColor(colors[i], i);
+            }
         }
     }
 }

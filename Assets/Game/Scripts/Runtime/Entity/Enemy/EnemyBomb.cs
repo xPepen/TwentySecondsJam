@@ -1,9 +1,17 @@
 using GameplayTags;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace Game.Scripts.Runtime.Entity.Enemy
 {
     public class EnemyBomb : Core.Classes.Enemy
     {
+        protected override void OnStart()
+        {
+            base.OnStart();
+            // GetComponent<NavMeshAgent>().SetDestination(new Vector3());
+            
+        }
 
         private float Counter = 0;
         protected override void OnUpdate(float deltaTime)

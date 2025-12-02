@@ -39,6 +39,8 @@ namespace Game.Scripts.Core.Generator
             NativeList<float2> uvs = new NativeList<float2>(Allocator.TempJob);
             NativeList<int> floorTris = new NativeList<int>(Allocator.TempJob);
             NativeList<int> wallTris = new NativeList<int>(Allocator.TempJob);
+            // NEW: Allocator for Roof
+            NativeList<int> roofTris = new NativeList<int>(Allocator.TempJob);
 
             int4 neighborFlags = new int4(
                 HasNeighbor(room, neighbors, Vector2.up) ? 1 : 0,
@@ -57,7 +59,8 @@ namespace Game.Scripts.Core.Generator
                 Vertices = verts,
                 UVs = uvs,
                 FloorTriangles = floorTris,
-                WallTriangles = wallTris
+                WallTriangles = wallTris,
+                RoofTriangles = roofTris // Assign new list
             };
 
             //Schedule and Complete Job
@@ -65,6 +68,7 @@ namespace Game.Scripts.Core.Generator
             handle.Complete();
 
             // Create Unity Object (Main Thread)
+            // //note: we could only create the object once in a future iteration
             GameObject roomObj = LevelObjectFactory.CreateRoomObject(
                 _config,
                 $"Room_{room.Rect.center}",
@@ -77,13 +81,15 @@ namespace Game.Scripts.Core.Generator
             //Assign Mesh
             Mesh mesh = new Mesh();
 
+            // Set indices for 3 submeshes (Floor, Wall, Roof)
             mesh.SetVertices(verts.AsArray());
             mesh.SetUVs(0, uvs.AsArray());
 
-            mesh.subMeshCount = 2;
+            mesh.subMeshCount = 3; // Increase count
 
             mesh.SetTriangles(floorTris.AsArray().ToArray(), 0);
             mesh.SetTriangles(wallTris.AsArray().ToArray(), 1);
+            mesh.SetTriangles(roofTris.AsArray().ToArray(), 2); // Set roof tris
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
@@ -96,6 +102,7 @@ namespace Game.Scripts.Core.Generator
             uvs.Dispose();
             floorTris.Dispose();
             wallTris.Dispose();
+            roofTris.Dispose(); // Dispose new list
         }
 
         private bool HasNeighbor(Room r, List<Room> neighbors, Vector2 dir)

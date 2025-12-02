@@ -448,7 +448,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fa3501a78f54c8780fa4fdac733100a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.StateMachine.StateMachine
-  _stateObjects: []
+  InitialState: {fileID: 0}
+  stateObjects:
+  - <ItemA>k__BackingField: {fileID: 0}
+    <ItemB>k__BackingField:
+      <TickType>k__BackingField: 0
+      <TickPriority>k__BackingField: 0
+      <OnInitialize>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateEnter>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateUpdate>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateFixedUpdate>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateExit>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateDestroy>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
 --- !u!114 &2236198508172279608
 MonoBehaviour:
   m_ObjectHideFlags: 0

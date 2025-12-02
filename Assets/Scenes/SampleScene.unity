@@ -1146,70 +1146,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d64e06df299830c40aedb6823f8afd58, type: 3}
---- !u!1 &655279222
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 655279224}
-  - component: {fileID: 655279223}
-  m_Layer: 0
-  m_Name: === NavMesh Surface ===
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &655279223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 655279222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
-  m_SerializedVersion: 0
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 721b5eebd3fd05940811e112998c315b, type: 2}
-  m_BuildHeightMesh: 0
---- !u!4 &655279224
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 655279222}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -82.3, y: 0.48662, z: -5.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &667144548
 GameObject:
   m_ObjectHideFlags: 0
@@ -1748,37 +1684,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &874199091
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 874199092}
-  m_Layer: 0
-  m_Name: ============================
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &874199092
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874199091}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &901040349 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2566716763073712926, guid: d64e06df299830c40aedb6823f8afd58, type: 3}
@@ -2370,7 +2275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Runtime.Utility.ApplyValueToEntityMono
   ValueAmount: 10
   obj: {fileID: 0}
-  PropertyToApplyValue: {fileID: 11400000, guid: 374081e19fa7af94aaefac9547d716af, type: 2}
+  PropertyToApplyValue: {fileID: 0}
   HowToApplyValue: 1
 --- !u!1001 &1226052959
 PrefabInstance:
@@ -3838,15 +3743,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8830371839290141995, guid: 7912926576968fe4db5d6606ca51cd71, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -83.62
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8830371839290141995, guid: 7912926576968fe4db5d6606ca51cd71, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.98
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8830371839290141995, guid: 7912926576968fe4db5d6606ca51cd71, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.86
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8830371839290141995, guid: 7912926576968fe4db5d6606ca51cd71, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4139,6 +4044,59 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1870780637}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1952415873 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3446008956166888548, guid: d64e06df299830c40aedb6823f8afd58, type: 3}
+  m_PrefabInstance: {fileID: 6849790239734079438}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1952415881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952415873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fa3501a78f54c8780fa4fdac733100a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Core.StateMachine.StateMachine
+  InitialState: {fileID: 0}
+  stateObjects:
+  - <ItemA>k__BackingField: {fileID: 11400000, guid: 67fb6d6ecd0ab304bbf82785dc378d7b, type: 2}
+    <ItemB>k__BackingField:
+      <TickType>k__BackingField: 0
+      <TickPriority>k__BackingField: 0
+      <OnInitialize>k__BackingField:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1952415873}
+            m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_MethodName: SetActive
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      <OnStateEnter>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateUpdate>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateFixedUpdate>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateExit>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <OnStateDestroy>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
 --- !u!1 &1961869804
 GameObject:
   m_ObjectHideFlags: 0
@@ -4677,6 +4635,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6768220510491845102, guid: d64e06df299830c40aedb6823f8afd58, type: 3}
+      propertyPath: StateMachine
+      value: 
+      objectReference: {fileID: 1952415881}
+    - target: {fileID: 6768220510491845102, guid: d64e06df299830c40aedb6823f8afd58, type: 3}
       propertyPath: tickerBehaviour.<TickPriority>k__BackingField
       value: 0
       objectReference: {fileID: 0}
@@ -4695,7 +4657,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3446008956166888548, guid: d64e06df299830c40aedb6823f8afd58, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1952415881}
   m_SourcePrefab: {fileID: 100100000, guid: d64e06df299830c40aedb6823f8afd58, type: 3}
 --- !u!4 &7455207942837477656 stripped
 Transform:
@@ -4707,8 +4672,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 410087041}
-  - {fileID: 655279224}
-  - {fileID: 874199092}
   - {fileID: 140229978}
   - {fileID: 387418596}
   - {fileID: 1161528065}

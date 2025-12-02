@@ -28,22 +28,27 @@ namespace Game.Scripts.Core.Classes
 
         public static T GetInternalComponent<T>(this GameObject obj)
         {
-            T component = obj.GetComponent<T>();
-            if (component != null)
+            if (obj.TryGetComponent<T>(out T result))
+                return result;
+
+            foreach (Transform child in obj.transform)
             {
-                return component;
+                if (child.TryGetComponent<T>(out result))
+                {
+                    return result;
+                }
             }
 
-            component = obj.GetComponentInChildren<T>();
-
-            if (component != null)
+            Transform parent = obj.transform.parent;
+            while (parent != null)
             {
-                return component;
+                if (parent.TryGetComponent<T>(out result))
+                    return result;
+
+                parent = parent.parent;
             }
 
-            component = obj.GetComponentInParent<T>();
-            //at this point @component could be null
-            return component;
+            return default;
         }
 
         public static Texture2D LoadTexture(this MonoBehaviour mono, string filePath)

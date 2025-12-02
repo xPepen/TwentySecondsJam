@@ -1,12 +1,11 @@
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace Game.Scripts.Runtime.LightAndShadow
 {
-    public enum ColorType
-    {
-        Black,
-        White
-    }
     public interface IMatColor
     {
-        public void SetColor(ColorType type);
+        public void SetColor(Color color);
+        public void Init(List<Color> colors);
     }
 }

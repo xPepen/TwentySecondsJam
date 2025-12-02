@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Game.Scripts.Core.Generator.Interface;
-using Unity.AI.Navigation;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,7 +13,10 @@ namespace Game.Scripts.Core.Generator
         private RoomMeshGenerator _meshGenerator;
         private RoomConnectionGenerator _connectionGenerator;
         private List<Room> _rooms;
+        private int Seed;
 
+
+        //just for testing purpose for now should be handle else where 
         [SerializeField] private GameObject Enemy;
 
         private void Awake()
@@ -50,19 +50,21 @@ namespace Game.Scripts.Core.Generator
 
             if (config.BakeNavMesh)
             {
-                await AddNavMeshNavigation();
+                await NavMeshUtils.AddNavMeshNavigation(GetRooms());
             }
 
             foreach (Room r in GetRooms())
             {
-                r.AddObjectAtRandomPos(Enemy, (GameObject obj) =>obj.SetActive(false));
+                r.AddObjectAtRandomPos(Enemy /*(GameObject obj) =>obj.SetActive(false)*/);
             }
+
+            await Task.Yield();
         }
 
         private async Task GenerateRoutine()
         {
             Clear();
-            Random.InitState(config.Seed);
+            Random.InitState(GetSeed());
 
             // Initialize Generators
             _layoutGenerator = new RoomLayoutGenerator(config);
@@ -82,26 +84,39 @@ namespace Game.Scripts.Core.Generator
             _rooms = levelData.Rooms;
         }
 
-        private async Task AddNavMeshNavigation()
+        public int GetSeed()
         {
-            int yieldCounter = 0;
-
-            foreach (var room in _rooms)
+            return config.Seed + GetSaltedSeed("Global");
+        }
+        
+        public int GetSeedWithSalt(string salt)
+        {
+            if (string.IsNullOrEmpty(salt))
             {
-                if (room == null)
-                {
-                    Debug.LogError("Room is null, can't bake navmesh", this);
-                    break;
-                }
+                return GetSeed();
+            }
+            
+            return config.Seed + GetSaltedSeed(salt);
+        }
+        
 
-                room?.AddNavMesh();
+        public void GenerateSeed()
+        {
+            config.Seed = Random.Range(100_000_000, 999_999_999);
+            print(config.Seed);
+        }
 
-                if (++yieldCounter % 5 == 0) await Task.Yield();
+        private int GetSaltedSeed(string salt)
+        {
+            unchecked // Allows overflow without error, which is desired for hashing
+            {
+                int saltHash = salt.GetHashCode();
+                return (config.Seed * 397) ^ saltHash;
             }
         }
 
 
-        void Clear()
+        private void Clear()
         {
             foreach (Transform child in transform) DestroyImmediate(child.gameObject);
 

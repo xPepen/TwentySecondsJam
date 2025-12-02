@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Game.Scripts.Core.Generator;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,6 +25,25 @@ public static class NavMeshUtils
                 return true;
             }
         }
+
         return false;
+    }
+
+    public static async Task AddNavMeshNavigation(List<Room> _rooms)
+    {
+        int yieldCounter = 0;
+
+        foreach (var room in _rooms)
+        {
+            if (room == null)
+            {
+                Debug.LogError("Room is null, can't bake navmesh");
+                break;
+            }
+
+            room?.AddNavMesh();
+
+            if (++yieldCounter % 5 == 0) await Task.Yield();
+        }
     }
 }
