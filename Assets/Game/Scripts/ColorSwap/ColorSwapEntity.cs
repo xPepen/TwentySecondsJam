@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public class ColorSwapEntities : MonoBehaviour
+public class ColorSwapEntity : MonoBehaviour
 {
     public Material[] lightMat;
     public Material[] darkMat;
 
     public bool usingLight = true;
+
+    public UnityEvent<bool> OnEntityColorSwapped;
 
     private Renderer rend;
     
@@ -28,6 +31,8 @@ public class ColorSwapEntities : MonoBehaviour
             ApplyLight();
         else
             ApplyDark();
+
+        OnEntityColorSwapped.Invoke(usingLight);
     }
 
     private void ApplyLight()
