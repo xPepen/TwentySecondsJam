@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +12,36 @@ public class ColorSwapEntity : MonoBehaviour
     public UnityEvent<bool> OnEntityColorSwapped;
 
     private Renderer rend;
-    
+
+    private void OnValidate()
+    {
+        PopulateMaterials();
+    }
+
+    private void PopulateMaterials()
+    {
+        // Change these to your folder paths
+        string lightFolder = "Assets/Game/Mat/Light";
+        string darkFolder = "Assets/Game/Mat/Dark";
+
+        lightMat = LoadMaterialsFromFolder(lightFolder);
+        darkMat = LoadMaterialsFromFolder(darkFolder);
+    }
+
+    private Material[] LoadMaterialsFromFolder(string folderPath)
+    {
+        string[] guids = AssetDatabase.FindAssets("t:Material", new[] { folderPath });
+        Material[] mats = new Material[guids.Length];
+
+        for (int i = 0; i < guids.Length; i++)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+            mats[i] = AssetDatabase.LoadAssetAtPath<Material>(path);
+        }
+
+        return mats;
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
