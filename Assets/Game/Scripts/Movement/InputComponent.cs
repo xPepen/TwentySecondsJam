@@ -10,7 +10,8 @@ public class InputComponent : MonoBehaviour
     // --- Public Actions ---
     public Action<Vector3> OnMoveAction;
     public Action<Vector2> OnLookAction;
-
+    public Action OnChangeColorAction;
+    
     /*
      * True if the fire button is pressed down, false if released
      */
@@ -41,6 +42,14 @@ public class InputComponent : MonoBehaviour
     }
 
     // --- Input Callbacks ---
+
+    private void OnChangeColor(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            OnChangeColorAction?.Invoke();
+        }
+}
     private void OnMoveStart(InputAction.CallbackContext context)
     {
         Vector2 input = context.ReadValue<Vector2>();
@@ -97,6 +106,7 @@ public class InputComponent : MonoBehaviour
 
         _controls.Gameplay.Fire.canceled += OnFirePerform;
         _controls.Gameplay.Fire.performed += OnFirePerform;
+        _controls.Gameplay.ChangeColor.performed += OnChangeColor;
 
 
         LockCursor(true, false);
@@ -116,6 +126,8 @@ public class InputComponent : MonoBehaviour
 
         _controls.Gameplay.Fire.canceled -= OnFirePerform;
         _controls.Gameplay.Fire.performed -= OnFirePerform;
+        _controls.Gameplay.ChangeColor.performed -= OnChangeColor;
+        
 
         LockCursor(false);
         _controls.Disable();

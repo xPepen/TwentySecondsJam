@@ -19,6 +19,7 @@ namespace Game.Scripts.Core.Classes
         //Cached Tags
         private GameplayTag JumpTag;
         private GameplayTag DashTag;
+        private GameplayTag ColorAbility;
         private GameplayTag LevelTag;
 
         private PlayerController PlayerController;
@@ -37,7 +38,8 @@ namespace Game.Scripts.Core.Classes
             //Cached internal frequently used tags 
             JumpTag = GameplayTag.RequestTag("Ability.Jump");
             DashTag = GameplayTag.RequestTag("Ability.Dash");
-
+            ColorAbility = GameplayTag.RequestTag("Ability.ChangeColor");
+            
             if (Animator)
             {
                 Animator.SetInteger(WalkingState, _currentState);
@@ -78,9 +80,18 @@ namespace Game.Scripts.Core.Classes
                 InputComponent.OnDashAction += OnCharacterDash;
                 InputComponent.OnFireAction += OnCharacterAttack;
                 InputComponent.OnMoveAction += OnCharacterMove;
+                InputComponent.OnChangeColorAction += OnChangeColor;
             }
         }
 
+        void OnChangeColor()
+        {
+            if (GameplayAbilityComponent)
+            {
+                GameplayAbilityComponent.PerformAbility(ColorAbility);
+            }
+        }
+        
         public override void UnPossessed()
         {
             if (InputComponent)
@@ -89,6 +100,7 @@ namespace Game.Scripts.Core.Classes
                 InputComponent.OnDashAction -= OnCharacterDash;
                 InputComponent.OnFireAction -= OnCharacterAttack;
                 InputComponent.OnMoveAction -= OnCharacterMove;
+                InputComponent.OnChangeColorAction -= OnChangeColor;
             }
 
             base.UnPossessed();
